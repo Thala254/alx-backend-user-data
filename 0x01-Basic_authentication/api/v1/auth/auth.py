@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
 """module with class to manage the API authentication"""
-from flask import request
-from typing import List, TypeVar
+from typing import List, TypeVar, Union
 import re
 
 
 class Auth:
     """class to manage authentication of the API"""
-    def __init__(self) -> None:
-        """
-        initilizes instance of the class
-        """
-        pass
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
@@ -36,7 +30,7 @@ class Auth:
                     return False
         return True
 
-    def authorization_header(self, request=None) -> str:
+    def authorization_header(self, request=None) -> Union[str, None]:
         """
          Returns the authorization header from a request object
         """
@@ -44,7 +38,7 @@ class Auth:
             return None
         return request.headers.get('Authorization')
 
-    def current_user(self, request=None) -> TypeVar('User'):
+    def current_user(self, request=None) -> Union[TypeVar('User'), None]:
         """
         Returns a User instance from information from a request object
         """

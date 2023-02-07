@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """basic_auth module"""
-from api.v1.auth.auth import Auth
-from models.user import User
 import re
 import binascii
 from base64 import b64decode
-from typing import TypeVar, List
+from typing import TypeVar, Tuple, Union
+from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class BasicAuth(Auth):
@@ -14,7 +14,7 @@ class BasicAuth(Auth):
     """
     def extract_base64_authorization_header(
            self,
-           authorization_header: str) -> str:
+           authorization_header: str) -> Union[str, None]:
         """
         Return:
             - Base64 part of the Authorization header for basic authentication
@@ -33,7 +33,7 @@ class BasicAuth(Auth):
 
     def decode_base64_authorization_header(
            self,
-           base64_authorization_header: str) -> str:
+           base64_authorization_header: str) -> Union[str, None]:
         """
         Return:
             - Decoded value of a Base64 string base64_authorization_header
@@ -50,7 +50,8 @@ class BasicAuth(Auth):
 
     def extract_user_credentials(
             self,
-            decoded_base64_authorization_header: str) -> (str, str):
+            decoded_base64_authorization_header: str
+            ) -> Tuple[Union[str, None], Union[str, None]]:
         """
         Return:
             - user email and password from the Base64 decoded value
@@ -68,7 +69,7 @@ class BasicAuth(Auth):
     def user_object_from_credentials(
             self,
             user_email: str,
-            user_pwd: str) -> TypeVar('User'):
+            user_pwd: str) -> Union[TypeVar('User'), None]:
         """
         Return:
             - User instance based on his email and password
