@@ -1,4 +1,4 @@
-# 0x01. Basic authentication
+# Basic authentication
 
 ## Background Context
 In this project, you will learn what the authentication process means and implement a **Basic Authentication** on a simple API.
