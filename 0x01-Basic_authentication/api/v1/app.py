@@ -3,12 +3,9 @@
 Route module for the API
 """
 from os import getenv
-
-from flask.helpers import _prepare_send_file_kwargs
-from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
-from flask_cors import (CORS, cross_origin)
-import os
+from flask_cors import CORS
+from api.v1.views import app_views
 
 
 app = Flask(__name__)
@@ -40,6 +37,7 @@ def authenticate() -> None:
                 abort(401)
             if auth.current_user(request) is None:
                 abort(403)
+    pass
 
 
 @app.errorhandler(404)
