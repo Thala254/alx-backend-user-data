@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-encrypt_password module implementing authentication
+encrypt_password module implementing password hashing
+and validation
 """
 import bcrypt
 

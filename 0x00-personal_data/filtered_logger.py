@@ -33,7 +33,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: List[str]) -> None:
+    def __init__(self, fields: List[str]):
         """initilizes an instance of RedactingFormatter class"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
@@ -59,8 +59,7 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
     handler = logging.StreamHandler()
-    formatter = RedactingFormatter(PII_FIELDS)
-    handler.setFormatter(formatter)
+    handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
     logger.addHandler(handler)
     return logger
 
@@ -69,12 +68,14 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     """
     function that returns a connector to the database
     """
-    user = os.getenv('PERSONAL_DATA_DB_USERNAME')
-    passwd = os.getenv('PERSONAL_DATA_DB_PASSWORD')
-    host = os.getenv('PERSONAL_DATA_DB_HOST')
-    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
-    conn = mysql.connector.connect(user=user, password=passwd, host=host,
-                                   database=db_name)
+    user = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    passwd = os.getenv('PERSONAL_DATA_DB_PASSWORD', 'root')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
+    conn = mysql.connector.connection.MySQLConnection(user=user,
+                                                      password=passwd,
+                                                      host=host,
+                                                      database=db_name)
     return conn
 
 
