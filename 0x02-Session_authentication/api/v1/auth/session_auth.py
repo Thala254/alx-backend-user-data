@@ -19,7 +19,7 @@ class SessionAuth(Auth):
             None is user_id is None or not a string
             Session ID in string format
         """
-        session_id = uuid4()
+        session_id = str(uuid4())
         if user_id and isinstance(user_id, str):
             self.user_id_by_session_id[str(session_id)] = user_id
             return session_id

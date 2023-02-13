@@ -20,9 +20,8 @@ def auth_session():
     password = request.form.get('password')
     if password is None or password == '':
         return jsonify({"error": "password missing"}), 400
-    try:
-        users = User.search({"email": email})
-    except Exception:
+    users = User.search({"email": email})
+    if not users or users == []:
         return jsonify({"error": "no user found for this email"}), 404    
     for user in users:
         if user.is_valid_password(password):
@@ -30,7 +29,7 @@ def auth_session():
             session_id = auth.create_session(user.id)
             session_name = os.getenv('SESSION_NAME')
             resp = jsonify(user.to_json())
-            resp.set_cookie(session_name, session_id)
+            resp.set_cookie(str(session_name), str(session_id))
             return resp
     return jsonify({"error": "wrong password"}), 401
 

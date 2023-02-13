@@ -2,6 +2,7 @@
 """
 Define class SessionDButh
 """
+from datetime import datetime, timedelta
 from .session_exp_auth import SessionExpAuth
 from models.user_session import UserSession
 
@@ -37,9 +38,17 @@ class SessionDBAuth(SessionExpAuth):
         Return:
             user id or None if session_id is None or not a string
         """
-        user_id = UserSession.search({"session_id": session_id})
-        if user_id:
-            return user_id
+        if session_id:
+            UserSession.load_from_file()
+            user_session = UserSession.search({"session_id": session_id})
+            if user_session:
+                user_session = user_session[0]
+                expired_time = user_session.created_at + \
+                  timedelta(seconds=self.session_duration)
+                if expired_time < datetime.utcnow():
+                    return None
+                return user_session.user_id
+            return None
         return None
 
     def destroy_session(self, request=None):
